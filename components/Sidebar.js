@@ -1,7 +1,7 @@
 import Image from "next/image";
 import SidebarLink from "./SidebarLink.js";
 import { HomeIcon } from "@heroicons/react/solid";
-import ImageOne from "../assets/ImageOne.png";
+import ImageOne from "../assets/ImageOne.jpg";
 import {
   HashtagIcon,
   BellIcon,
