@@ -1,12 +1,47 @@
-// import Image from "next/image";
-// import ImageOne from "../assets/ImageOne.jpg";
+import { useState, useRef, useEffect } from "react";
+import {
+  XIcon,
+  PhotographIcon,
+  EmojiHappyIcon,
+} from "@heroicons/react/outline";
+import data from "@emoji-mart/data";
+// import { Picker } from "emoji-mart";
 
-import { useState } from "react";
-import { XIcon, PhotographIcon } from "@heroicons/react/outline";
+// function EmojiPicker(props) {
+//   const ref = useRef();
+//
+//   useEffect(() => {
+//     new Picker({ ...props, data, ref });
+//   }, []);
+//
+//   return <div ref={ref} />;
+// }
 
 const Input = () => {
-  const [input, setInput] = useState();
+  const [input, setInput] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const [showEmojis, setShowEmojis] = useState(false);
+  const filePickerRef = useRef(null);
+
+  const addImageToPost = () => {};
+
+  const Picker = (props = {}) => {
+    const ref = useRef();
+
+    import("emoji-mart").then((EmojiMart) => {
+      new EmojiMart.Picker({ ...props, data, ref });
+    });
+
+    return <div ref={ref}></div>;
+  };
+
+  const addEmoji = (e) => {
+    let sym = e.unified.split("-");
+    let codesArray = [];
+    sym.forEach((el) => codesArray.push("0x" + el));
+    let emoji = String.fromCodePoint(...codesArray);
+    setInput(input + emoji);
+  };
 
   return (
     <div
@@ -45,10 +80,27 @@ const Input = () => {
         </div>
         <div className="flex items-center justify-between pt-2.5">
           <div className="flex items-center">
-            <div className="icons">
+            <div className="icon" onClick={() => filePickerRef.current.click()}>
               <PhotographIcon className="h-[22px] text-white" />
-              <input type="text" />
+              <input
+                type="file"
+                hidden
+                onChange={addImageToPost}
+                ref={filePickerRef}
+              />
             </div>
+            <div
+              className="icon rotate-180"
+              onClick={() => setShowEmojis(!showEmojis)}
+            >
+              <EmojiHappyIcon className="text-white h-[22px]" />
+            </div>
+
+            {showEmojis && (
+              <div className="emojiPosition">
+                <Picker onEmojiSelect={addEmoji} />
+              </div>
+            )}
           </div>
         </div>
       </div>
