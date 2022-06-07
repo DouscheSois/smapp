@@ -5,25 +5,65 @@ import {
   EmojiHappyIcon,
 } from "@heroicons/react/outline";
 import data from "@emoji-mart/data";
-// import { Picker } from "emoji-mart";
-
-// function EmojiPicker(props) {
-//   const ref = useRef();
-//
-//   useEffect(() => {
-//     new Picker({ ...props, data, ref });
-//   }, []);
-//
-//   return <div ref={ref} />;
-// }
+//Firebase Imports
+import { db, storage } from "../firebase";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from "@firebase/firestore";
+import { getDownloadURL, ref, uploadString } from "@firebase/storage";
+// import { useSession } from "next-auth/react";
 
 const Input = () => {
+  // const { data: session } = useSession();
   const [input, setInput] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [showEmojis, setShowEmojis] = useState(false);
+  const [loading, setLoading] = useState(false);
   const filePickerRef = useRef(null);
 
-  const addImageToPost = () => {};
+  const sendPost = async () => {
+    if (loading) return;
+    setLoading(true);
+
+    const docRef = await addDoc(collection(db, "posts"), {
+      // id: session.user.uid,
+      // username: session.user.name,
+      // userImg: session.user.image,
+      // tag: session.user.tag,
+      text: input,
+      timeStamp: serverTimestamp(),
+    });
+
+    const imageRef = ref(storage, `posts/${docRef.id}/image`);
+
+    if (selectedFile) {
+      await uploadString(imageRef, selectedFile, "data_url").then(async () => {
+        const downloadURL = await getDownloadURL(imageRef);
+        await updateDoc(doc(db, "posts", docRef.id), {
+          image: downloadURL,
+        });
+      });
+    }
+
+    setLoading(false);
+    setInput("");
+    setSelectedFile(null);
+    setShowEmojis(false);
+  };
+
+  const addImageToPost = (e) => {
+    const reader = new FileReader();
+    if (e.target.files[0]) {
+      reader.readAsDataURL(e.target.files[0]);
+    }
+    reader.onload = (readerEvent) => {
+      setSelectedFile(readerEvent.target.result);
+    };
+  };
 
   const Picker = (props = {}) => {
     const ref = useRef();
@@ -45,7 +85,9 @@ const Input = () => {
 
   return (
     <div
-      className={`border-b border-gray-700 p-3 flex space-x-3 overflow-y-scroll`}
+      className={`border-b border-gray-700 p-3 flex space-x-3 overflow-y-scroll ${
+        loading && "opacity-60"
+      }`}
     >
       <img
         src="https://www.jquery-az.com/html/images/banana.jpg"
@@ -78,37 +120,43 @@ const Input = () => {
             </div>
           )}
         </div>
-        <div className="flex items-center justify-between pt-2.5">
-          <div className="flex items-center">
-            <div className="icon" onClick={() => filePickerRef.current.click()}>
-              <PhotographIcon className="h-[22px] text-white" />
-              <input
-                type="file"
-                hidden
-                onChange={addImageToPost}
-                ref={filePickerRef}
-              />
-            </div>
-            <div
-              className="icon rotate-180"
-              onClick={() => setShowEmojis(!showEmojis)}
-            >
-              <EmojiHappyIcon className="text-white h-[22px]" />
-            </div>
-
-            {showEmojis && (
-              <div className="emojiPosition">
-                <Picker onEmojiSelect={addEmoji} />
+        {!loading && (
+          <div className="flex items-center justify-between pt-2.5">
+            <div className="flex items-center">
+              <div
+                className="icon"
+                onClick={() => filePickerRef.current.click()}
+              >
+                <PhotographIcon className="h-[22px] text-white" />
+                <input
+                  type="file"
+                  hidden
+                  onChange={addImageToPost}
+                  ref={filePickerRef}
+                />
               </div>
-            )}
+              <div
+                className="icon rotate-180"
+                onClick={() => setShowEmojis(!showEmojis)}
+              >
+                <EmojiHappyIcon className="text-white h-[22px]" />
+              </div>
+
+              {showEmojis && (
+                <div className="emojiPosition">
+                  <Picker onEmojiSelect={addEmoji} />
+                </div>
+              )}
+            </div>
+            <button
+              className="bg-[#d65d7a] text-white rounded-full px-4 py-1.5 font-bold shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!input.trim() && !selectedFile}
+              onClick={sendPost}
+            >
+              Post
+            </button>
           </div>
-          <button
-            className="bg-[#d65d7a] text-white rounded-full px-4 py-1.5 font-bold shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={!input.trim() && !selectedFile}
-          >
-            Post
-          </button>
-        </div>
+        )}
       </div>
     </div>
   );
