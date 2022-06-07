@@ -53,7 +53,7 @@ const Input = () => {
         className="h-11 w-11 rounded-full cursor-pointer"
       />
       <div className="w-full divide-y divide-gray-700">
-        <div className={``}>
+        <div className={`${selectedFile && "pb-7"} ${input && "space-y-2.5"}`}>
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -102,6 +102,12 @@ const Input = () => {
               </div>
             )}
           </div>
+          <button
+            className="bg-[#d65d7a] text-white rounded-full px-4 py-1.5 font-bold shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!input.trim() && !selectedFile}
+          >
+            Post
+          </button>
         </div>
       </div>
     </div>

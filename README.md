@@ -2,6 +2,8 @@ This is an open-source application to showcase my skills and code. Some of the
 technologies that I will be using to create this application are React, Next,
 TailwindCss, Firebase, NextAuth, and Recoil.
 
+This webapp is a twitter style social media application with basic crud functionality.
+
 ---
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
