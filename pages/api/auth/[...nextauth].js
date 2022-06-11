@@ -4,7 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 export default NextAuth({
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOG_CLIENT_ID,
+      clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
@@ -13,7 +13,7 @@ export default NextAuth({
       session.user.tag = session.user.name
         .split(" ")
         .join("")
-        .toLocalLowerCase();
+        .toLocaleLowerCase();
       session.user.uid = token.sub;
       return session;
     },

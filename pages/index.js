@@ -1,14 +1,19 @@
+import { useSession, getProviders, getSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
-import { getProviders, getSession, useSession } from "next-auth/react";
 
 // Components
 import Sidebar from "../components/Sidebar.js";
 import Feed from "../components/Feed.js";
 import Widgets from "../components/Widgets.js";
 import Modal from "../components/Modal.js";
+import Login from "../components/Login.js";
 
-const Home = () => {
+const Home = ({ trendingResults, followResults, providers }) => {
+  const { data: session } = useSession();
+
+  if (!session) return <Login providers={providers} />;
+
   return (
     <div className="bg-slate-100">
       <Head>
@@ -24,7 +29,7 @@ const Home = () => {
     </div>
   );
 };
-// Can you put this in another file?
+
 export async function getServerSideProps(context) {
   const trendingResults = await fetch(
     "https://jsonkeeper.com/b/NKEV"
