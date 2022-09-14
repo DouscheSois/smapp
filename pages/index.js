@@ -32,10 +32,10 @@ const Home = ({ trendingResults, followResults, providers }) => {
 
 export async function getServerSideProps(context) {
   const trendingResults = await fetch(
-    "https://jsonkeeper.com/b/NKEV"
+    "https://jsonplaceholder.typicode.com/posts"
   ).then((res) => res.json());
   const followResults = await fetch(
-    "https://jsonkeeper.com/b/WWMJ"
+    "https://jsonplaceholder.typicode.com/posts"
   ).then((res) => res.json());
 
   const providers = await getProviders();
