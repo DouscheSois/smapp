@@ -1,6 +1,6 @@
 Don't forget about the timestamp added to the firebase storage if you get permission denied error from firebase
 
-## video: 3:35 hours start at
+## video: 3:44 hours start at
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
