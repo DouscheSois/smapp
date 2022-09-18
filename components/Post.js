@@ -24,6 +24,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Moment from "react-moment";
+// import NewMoment from './NewMoment';
 import { useRecoilState } from "recoil";
 import { modalState, postIdState } from "../atoms/modalAtom";
 import { db } from "../firebase";
@@ -94,7 +95,7 @@ const Post = ({ id, post, postPage }) => {
             </div>{" "}
             .{" "}
             <span className="hover:underline text-sm sm:text-[15px]">
-              <Moment fromNow>{post?.timestamp?.toDate()}</Moment>
+              <Moment fromNow>{post?.timeStamp?.toDate()}</Moment>
             </span>
             {!postPage && (
               <p className="text-[15px] sm:text-base mt-0.5 text-[#000000]">

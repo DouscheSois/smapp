@@ -1,6 +1,5 @@
 Don't forget about the timestamp added to the firebase storage if you get permission denied error from firebase
 
--Moment not dispalying correct time from
 -Likes not working
 
 ## video: 4:48 hours start at
