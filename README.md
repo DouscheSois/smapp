@@ -1,8 +1,7 @@
 Don't forget about the timestamp added to the firebase storage if you get permission denied error from firebase
 
--Likes not working
-
-## video: 4:48 hours start at
+-the posts arent coming out right, orderBy
+-<Transition.Root show={false} needs to be isOpen
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
